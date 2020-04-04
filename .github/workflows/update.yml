@@ -6,6 +6,8 @@ name: Deploy JSON Files
 on:
   schedule:
     - cron:  '*/60 * * * *'
+      
+  push:
 
 
 jobs:
