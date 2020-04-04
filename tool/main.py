@@ -1,13 +1,14 @@
 from datetime import datetime, timedelta
 
 import config
-from util import MAIN_SUMMARY_INIT, excel_date, get_xlsx, jst, dumps_json
+from util import MAIN_SUMMARY_INIT, excel_date, get_xlsx, jst, dumps_json, get_json
 
 from typing import Dict
 
 
 class DataJson:
     def __init__(self):
+        self.current_data_json = get_json(config.data_json_filename)
         # self.patients_file = get_xlsx(config.patients_xlsx, "patients.xlsx")
         self.patients_and_inspections_file = get_xlsx(
             config.patients_and_inspections_xlsx, "patients_and_inspections.xlsx"
@@ -195,16 +196,17 @@ class DataJson:
             self.main_summary_sheet.cell(row=16, column=2).value
 
     def make_data(self) -> None:
-        self._data_json = {
-            "patients": self.patients_json(),
-            "patients_summary": self.patients_summary_json(),
-            "inspections_summary": self.inspections_summary_json(),
-            "contacts1_summary": self.contacts1_summary_json(),
-            "contacts2_summary": self.contacts2_summary_json(),
-            "treated_summary": self.treated_summary_json(),
-            "lastUpdate": self.last_update,
-            "main_summary": self.main_summary_json()
-        }
+        d = self.current_data_json
+        d["patients"] = self.patients_json()
+        d["patients_summary"] = self.patients_summary_json()
+        d["inspections_summary"] = self.inspections_summary_json()
+        d["contacts1_summary"] = self.contacts1_summary_json()
+        d["contacts2_summary"] = self.contacts2_summary_json()
+        d["treated_summary"] = self.treated_summary_json()
+        d["main_summary"] = self.main_summary_json()
+        if d != self.current_data_json:
+            d["lastUpdate"] = self.last_update
+        self._data_json = d
 
     def get_patients_last_update(self) -> str:
         return self.patients_sheet.cell(row=1, column=1).value.strftime("%Y/%m/%d %H:%M")
@@ -248,4 +250,4 @@ class DataJson:
 
 
 if __name__ == '__main__':
-    dumps_json("data.json", DataJson().data_json())
+    dumps_json(config.data_json_filename, DataJson().data_json())
