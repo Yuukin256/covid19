@@ -32,7 +32,6 @@ jobs:
       uses: peter-evans/create-pull-request@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        path: development
         commit-message: Bot data.jsonを更新
         title: Bot data.jsonの更新
         base: development
