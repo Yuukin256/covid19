@@ -6,6 +6,8 @@ name: Deploy JSON Files
 on:
   schedule:
     - cron:  '*/60 * * * *'
+      
+  push:
 
 
 jobs:
@@ -29,8 +31,8 @@ jobs:
     - name: Pull request
       uses: peter-evans/create-pull-request@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: "Bot: data.jsonの更新"
+        token: ${{ secrets.GITHUB_TOKEN 
+        commit-message: "Bot: data.jsonを更新"
         title: "Bot: data.jsonの更新"
         base: development
         branch: data-bot/development
