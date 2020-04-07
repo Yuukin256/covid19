@@ -35,4 +35,3 @@ jobs:
         commit-message: "Bot: data.jsonの更新"
         title: "Bot: data.jsonの更新"
         base: development
-        branch: data-bot/development
